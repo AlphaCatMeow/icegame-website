@@ -34,7 +34,12 @@
           </n-row>
         </n-form>
       </n-gi>
-      <n-gi v-else> 开始游戏喽 </n-gi>
+      <n-gi v-else>
+        <n-grid cols="4" item-responsive>
+          <n-grid-item span="3">1</n-grid-item>
+          <n-grid-item span="1">2</n-grid-item>
+        </n-grid>
+      </n-gi>
       <n-gi></n-gi>
     </n-grid>
   </div>
