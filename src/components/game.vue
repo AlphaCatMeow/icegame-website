@@ -5,25 +5,13 @@
       <n-gi v-if="!isLogin" span="10">
         <n-form :model="model">
           <n-form-item path="nameOrEmail" label="用户名or邮箱">
-            <n-input
-              v-model:value="model.nameOrEmail"
-              @keydown.enter.prevent
-              placeholder="FishPi账号"
-            />
+            <n-input v-model:value="model.nameOrEmail" @keydown.enter.prevent placeholder="FishPi账号" />
           </n-form-item>
           <n-form-item path="userPassword" label="密码">
-            <n-input
-              v-model:value="model.userPassword"
-              @keydown.enter.prevent
-              placeholder="FishPi密码"
-            />
+            <n-input v-model:value="model.userPassword" @keydown.enter.prevent placeholder="FishPi密码" />
           </n-form-item>
           <n-form-item path="mfaCode" label="二步验证">
-            <n-input
-              v-model:value="model.mfaCode"
-              @keydown.enter.prevent
-              placeholder="没有就空着"
-            />
+            <n-input v-model:value="model.mfaCode" @keydown.enter.prevent placeholder="没有就空着" />
           </n-form-item>
           <n-row :gutter="[0, 24]">
             <n-col :span="12">
@@ -51,12 +39,7 @@
           <n-grid-item span="2">
             <div>
               <n-input-group>
-                <n-input
-                  :style="{ width: '60%' }"
-                  v-model:value="instr"
-                  placeholder="输入指令"
-                  @keydown.enter.prevent="sendMessage"
-                />
+                <n-input :style="{ width: '60%' }" v-model:value="instr" placeholder="输入指令" @keydown.enter.prevent="sendMessage" />
                 <n-button type="primary" ghost @click="sendMessage"> 发送 </n-button>
               </n-input-group>
             </div>
@@ -87,6 +70,8 @@ import { ModelType } from "../assets/type";
 
 var token = ref("");
 var gameCK = ref("");
+var uid = ref("");
+var user = ref("");
 const message = useMessage();
 const model = ref<ModelType>({
   nameOrEmail: null,
@@ -107,51 +92,72 @@ onMounted(() => {
   let t = localStorage.getItem("key");
   if (t) {
     token.value = t;
+  }
+  let u = localStorage.getItem("uid");
+  if (u) {
+    uid.value = u;
+  }
+  let g = localStorage.getItem("gameCK");
+  if (g) {
+    gameCK.value = g;
+  }
+  let n = localStorage.getItem("user");
+  if (n) {
+    user.value = n;
+  }
+  if (t && u && n) {
     isLogin.value = true;
+    initSocket();
   }
   console.log(token.value);
   console.log(goods);
-  socket.value = io("wss://game-test.yuis.cc");
+});
 
-  socket.value.on("hello", function (msg) {
-    console.log(msg);
-    socket.value.emit(
-      "setUser",
-      JSON.stringify({
-        uid: "1641797163833",
-        user: "Kirito",
-        ck: token.value,
-      })
-    );
-  });
+const initSocket = () => {
+  //@ts-ignore
+  socket.value = io("wss://game.yuis.cc");
 
-  socket.value.on("setCK", function (msg) {
+  //@ts-ignore
+  socket.value.emit(
+    "setUser",
+    JSON.stringify({
+      uid: uid.value,
+      user: user.value,
+      ck: gameCK.value,
+    })
+  );
+
+  //@ts-ignore
+  socket.value.on("setCK", function (msg: any) {
     let data = JSON.parse(msg);
     gameCK.value = data.ck;
+    localStorage.setItem("gameCK", data.ck);
     console.log(data);
     showMessage(msg, 0);
   });
-
-  socket.value.on("gameMsg", function (msg) {
+  //@ts-ignore
+  socket.value.on("gameMsg", function (msg: any) {
     showMessage(msg, 1);
   });
-
-  socket.value.on("serverMsg", function (msg) {
+  //@ts-ignore
+  socket.value.on("serverMsg", function (msg: any) {
     showMessage(msg, 2);
   });
-});
+};
 
 const sendMessage = () => {
   let type = "gameMsg";
   if (/登录/g.test(instr.value)) {
     type = "login";
   }
+  //@ts-ignore
   socket.value.emit(
     type,
     JSON.stringify({
       ck: gameCK.value,
       msg: instr.value,
-      user: "Kirito",
+      user: user.value,
+      uid: uid.value,
     })
   );
   instr.value = "";
@@ -193,7 +199,7 @@ const showMessage = (msg: string, type: number) => {
 
 const login = () => {
   axios({
-    url: "http://localhost:3004/login",
+    url: "https://game.yuis.cc/login",
     method: "get",
     params: {
       nameOrEmail: model.value.nameOrEmail,
@@ -205,8 +211,12 @@ const login = () => {
       message.success("登录成功");
       localStorage.setItem("uid", res.data.data.oId);
       localStorage.setItem("key", res.data.key);
-      localStorage.setItem("user", res.data.data.user);
+      localStorage.setItem("user", res.data.data.userName);
+      user.value = res.data.data.userName;
+      uid.value = res.data.data.oId;
+      token.value = res.data.key;
       isLogin.value = true;
+      initSocket();
     } else {
       message.error("登录失败");
     }
