@@ -42,6 +42,15 @@
                 <n-input :style="{ width: '60%' }" v-model:value="instr" placeholder="输入指令" @keydown.enter.prevent="sendMessage" />
                 <n-button type="primary" ghost @click="sendMessage"> 发送 </n-button>
               </n-input-group>
+              <n-space style="margin-top: 10px">
+                <n-button type="primary" secondary @click="sendFastMsg('信息')"> 信息 </n-button>
+                <n-button type="primary" secondary @click="sendFastMsg('吐纳')"> 吐纳 </n-button>
+                <n-button type="primary" secondary @click="sendFastMsg('历练')"> 历练 </n-button>
+                <n-button type="primary" secondary @click="sendFastMsg('一键吐纳')"> 一键吐纳 </n-button>
+                <n-button type="primary" secondary @click="sendFastMsg('一键历练')"> 一键历练 </n-button>
+                <n-button type="primary" secondary @click="sendFastMsg('大地图')"> 大地图 </n-button>
+                <n-button type="primary" secondary @click="sendFastMsg('门派列表')"> 门派列表 </n-button>
+              </n-space>
             </div>
             <div v-html="userInfo"></div>
           </n-grid-item>
@@ -161,6 +170,20 @@ const sendMessage = () => {
     })
   );
   instr.value = "";
+};
+
+const sendFastMsg = (msg: string) => {
+  //@ts-ignore
+  socket.value.emit(
+    "gameMsg",
+    JSON.stringify({
+      ck: gameCK.value,
+      msg: msg,
+      user: user.value,
+      uid: uid.value,
+    })
+  );
+  return;
 };
 
 const showMessage = (msg: string, type: number) => {
