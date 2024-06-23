@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+   
     <n-grid x-gap="12" :cols="12">
       <n-gi span="1"></n-gi>
       <n-gi v-if="!isLogin" span="10">
@@ -54,7 +55,7 @@
             </div>
             <div v-html="userInfo"></div>
           </n-grid-item>
-          <n-grid-item span="3">
+          <n-grid-item span="3" style="max-height: 50vw; overflow: scroll">
             <div v-for="(item, index) in messageList" :key="index">
               <div class="logs" :class="'logs-' + item.type">
                 <div>[{{ item.name }}]</div>
@@ -63,6 +64,13 @@
             </div>
           </n-grid-item>
         </n-grid>
+      </n-gi>
+      <n-gi span="1"></n-gi>
+    </n-grid>
+    <n-grid x-gap="12" :cols="12">
+      <n-gi span="1"></n-gi>
+      <n-gi span="10">
+        <div style="font-size: 10px;color:#fc0272FF;text-align:center">game-version:3.2.0 website-version:1.2.0</div> 
       </n-gi>
       <n-gi span="1"></n-gi>
     </n-grid>
