@@ -1,0 +1,103 @@
+@font-face {
+  font-family: "pix";
+  src: url('https://assets.yuimeta.com/pixel_font.ttf');
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "pix";
+  box-sizing: border-box;
+}
+
+.m1 {
+  margin: 1rem;
+}
+.m2 {
+  margin: 2rem;
+}
+.mb0 {
+  margin-bottom: 0;
+}
+.p1 {
+  padding: 1rem;
+}
+
+.p2 {
+  padding: 2rem;
+}
+.pb0 {
+  padding-bottom: 0;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+/* items */
+.close {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  background-image: url("./assets/icons/close.png");
+  background-size: contain;
+}
+
+.btn {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 2px solid #000;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  transition: 0.2s;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.btn:hover::before {
+  width: 100%;
+}
+.btn.disabled {
+  cursor: "not-allowed";
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+.btn.disabled:hover::before {
+  width: 0%;
+}
+
+.input {
+  padding: 0.5rem 1rem;
+  border: 2px solid #000;
+  outline: none;
+  font-size: 16px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: #f8f8f800;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  transition: all 2s;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #dddddd;
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #bbb;
+}
+::-webkit-scrollbar-corner {
+  background-color: rgba(255, 255, 255, 0);
+}

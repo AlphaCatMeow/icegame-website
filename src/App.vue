@@ -1,21 +1,17 @@
-<template>
-  <n-config-provider :theme-overrides="themeOverrides">
-    <n-message-provider>
-      <Game />
-    </n-message-provider>
-  </n-config-provider>
-</template>
 <script setup lang="ts">
-import Game from "./components/game.vue";
-import { NConfigProvider } from "naive-ui";
-const themeOverrides = {
-  common: {
-    primaryColor: "#fc0272FF",
-    primaryColorHover: "#FC0259FF",
-    primaryColorPressed: "#fc0272FF",
-    primaryColorSuppl: "#fc0272FF",
-  },
-};
+import layout from './components/layout.vue';
 </script>
 
-<style scoped></style>
+<template>
+  <div id="app">
+    <layout />
+  </div>
+</template>
+
+<style scoped>
+#app{
+  /* background-color: #000; */
+  min-width: 100vh;
+  min-height: 80vh;
+}
+</style>
